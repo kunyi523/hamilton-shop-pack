@@ -66,6 +66,28 @@ python3 -m http.server 8000
 
 ## Deployment
 
-GitHub Pages, deploying from the `main` branch, root (`/`) folder. Pushing to `main` publishes;
-the live URL can take a minute or two to reflect a change, and a hard refresh clears a stale CDN
-copy.
+### One-time step: turn Pages on
+
+**Pages still has to be switched on by hand, once, by the repo owner.** Everything else is done
+and committed. Go to **Settings → Pages**, and under *Build and deployment* set:
+
+- **Source:** Deploy from a branch
+- **Branch:** `main`, folder `/ (root)` → **Save**
+
+The site then builds and appears at https://kunyi523.github.io/hamilton-shop-pack/ after a minute
+or two.
+
+This cannot be automated from a script or an Action. GitHub's *create a Pages site* endpoint
+requires `pages=write` **and** `administration=write`; `administration` is not a permission an
+Actions `GITHUB_TOKEN` can ever be granted, so both the REST call and `actions/configure-pages`
+return `403 Resource not accessible by integration` until a human picks the source.
+
+### After that
+
+Pushing to `main` republishes. The live URL can take a minute or two to reflect a change, and a
+hard refresh clears a stale CDN copy.
+
+`.github/workflows/pages.yml` covers the other option: if you pick **Source: GitHub Actions**
+instead of a branch, that workflow uploads and deploys the page. It first checks which source is
+configured and skips deploying when Pages is serving from the branch, since the two modes are
+mutually exclusive — so it stays green either way.
