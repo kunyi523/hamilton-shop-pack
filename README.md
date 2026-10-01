@@ -40,9 +40,16 @@ ZIP off-repo) and keep the page copy in sync.
 
 ## Payment
 
-There is no payment link, no Stripe, no PayPal, and no checkout. Every call to action is a
-`mailto:` to **likunyi020523@gmail.com** with the subject `Hamilton Shop Pack — buy`. Do not add
-an invented payment URL to this page; wire up a real one only once an account actually exists.
+Buyers pay on Ko-fi: **https://ko-fi.com/xiaozhanghuchaindesk**. Every buy button on the page
+points there.
+
+Ko-fi doesn't reliably pass along which items were bought or where to send them, so the page asks
+buyers to follow up by email to **likunyi020523@gmail.com** (subject `Hamilton Shop Pack — paid`)
+with their shop name, what they bought, and the delivery address. Fulfilment is still manual.
+
+`mailto:` links are otherwise used only for general questions and for asking about the separate
+~CAD $99 done-for-you service. Don't add any other payment processor to the page unless an
+account for it actually exists.
 
 ## Compliance ground rules
 
@@ -66,25 +73,8 @@ python3 -m http.server 8000
 
 ## Deployment
 
-### One-time step: turn Pages on
-
-**Pages still has to be switched on by hand, once, by the repo owner.** Everything else is done
-and committed. Go to **Settings → Pages**, and under *Build and deployment* set:
-
-- **Source:** Deploy from a branch
-- **Branch:** `main`, folder `/ (root)` → **Save**
-
-The site then builds and appears at https://kunyi523.github.io/hamilton-shop-pack/ after a minute
-or two.
-
-This cannot be automated from a script or an Action. GitHub's *create a Pages site* endpoint
-requires `pages=write` **and** `administration=write`; `administration` is not a permission an
-Actions `GITHUB_TOKEN` can ever be granted, so both the REST call and `actions/configure-pages`
-return `403 Resource not accessible by integration` until a human picks the source.
-
-### After that
-
-Pushing to `main` republishes. The live URL can take a minute or two to reflect a change, and a
+Pages is enabled and serves from the `main` branch, root (`/`) folder. Pushing to `main`
+republishes. The live URL can take a minute or two to reflect a change, and a
 hard refresh clears a stale CDN copy.
 
 `.github/workflows/pages.yml` covers the other option: if you pick **Source: GitHub Actions**
