@@ -17,13 +17,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -u
-          existing=$(gh api "repos/${GITHUB_REPOSITORY}/pages" 2>/dev/null || true)
-          if [ -n "$existing" ]; then
-            echo "Pages already enabled:"
-            echo "$existing"
+          if gh api "repos/${GITHUB_REPOSITORY}/pages" > /tmp/pages.json 2> /tmp/pages.err; then
+            echo "Pages already enabled."
           else
+            echo "Pages not enabled yet; creating site."
             gh api -X POST "repos/${GITHUB_REPOSITORY}/pages" \
               -f 'source[branch]=main' -f 'source[path]=/'
           fi
-          gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '"url=" + .html_url + " status=" + (.status // "pending")'
+          gh api "repos/${GITHUB_REPOSITORY}/pages"
