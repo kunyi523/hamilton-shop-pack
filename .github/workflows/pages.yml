@@ -15,7 +15,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Pages can be served either straight from the main branch or by this
+  # workflow, and the two modes are mutually exclusive. Creating the Pages site
+  # needs admin rights that an Actions token cannot hold, so the source is
+  # chosen once by hand under Settings -> Pages; this job only takes over when
+  # that choice was "GitHub Actions".
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.probe.outputs.mode }}
+    steps:
+      - name: Detect configured Pages source
+        id: probe
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if build_type=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '.build_type // "legacy"' 2> /dev/null); then
+            echo "Pages source: ${build_type}"
+          else
+            build_type=none
+            echo "Pages is not enabled for this repository yet."
+            echo "Enable it under Settings -> Pages, then this workflow or the"
+            echo "branch build will publish the page."
+          fi
+          echo "mode=${build_type}" >> "$GITHUB_OUTPUT"
+
   deploy:
+    needs: check
+    if: needs.check.outputs.mode == 'workflow'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -25,8 +52,6 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
