@@ -1,0 +1,29 @@
+name: Enable GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+
+jobs:
+  enable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable Pages from main / root
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -u
+          existing=$(gh api "repos/${GITHUB_REPOSITORY}/pages" 2>/dev/null || true)
+          if [ -n "$existing" ]; then
+            echo "Pages already enabled:"
+            echo "$existing"
+          else
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/pages" \
+              -f 'source[branch]=main' -f 'source[path]=/'
+          fi
+          gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '"url=" + .html_url + " status=" + (.status // "pending")'
