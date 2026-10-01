@@ -40,12 +40,17 @@ ZIP off-repo) and keep the page copy in sync.
 
 ## Payment
 
-Buyers pay on Ko-fi: **https://ko-fi.com/xiaozhanghuchaindesk**. Every buy button on the page
-points there.
+Buyers pay on the Ko-fi shop listing for the full pack:
+**https://ko-fi.com/s/393fee4cd8** (CAD $49, Buy now / Add to cart). Every buy button on the page
+points at that listing, not at the Ko-fi profile homepage — the profile has no Support or shop
+button, so sending buyers there dead-ends them.
 
-Ko-fi doesn't reliably pass along which items were bought or where to send them, so the page asks
-buyers to follow up by email to **likunyi020523@gmail.com** (subject `Hamilton Shop Pack — paid`)
-with their shop name, what they bought, and the delivery address. Fulfilment is still manual.
+The listing only covers the **full pack**. The $29 / $19 / $15 single items have no Ko-fi listing
+yet, so the page tells those buyers to email instead; add listings and swap in their URLs when
+they exist.
+
+Delivery is manual: buyers email **likunyi020523@gmail.com** (subject `Hamilton Shop Pack — paid`)
+with their shop name and download address if Ko-fi didn't collect them.
 
 `mailto:` links are otherwise used only for general questions and for asking about the separate
 ~CAD $99 done-for-you service. Don't add any other payment processor to the page unless an
